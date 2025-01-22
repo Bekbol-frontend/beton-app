@@ -1,10 +1,12 @@
+"use client";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { memo } from "react";
+import { memo, useCallback } from "react";
 
 interface IProps {
   addClass?: string;
   addClassLink?: string;
+  onClose?: () => void;
 }
 
 const links = [
@@ -30,7 +32,13 @@ const links = [
   },
 ];
 
-function HeaderMenuItems({ addClass = "" }: IProps) {
+function HeaderMenuItems({ addClass = "", onClose }: IProps) {
+  const onClickLink = useCallback(() => {
+    if (onClose) {
+      onClose();
+    }
+  }, [onClose]);
+
   return (
     <ul className={cn("flex gap-10", addClass)}>
       {links.map(({ href, text, id }) => (
@@ -43,6 +51,7 @@ function HeaderMenuItems({ addClass = "" }: IProps) {
             text-lg
         "
           key={id}
+          onClick={onClickLink}
         >
           {text}
         </Link>
